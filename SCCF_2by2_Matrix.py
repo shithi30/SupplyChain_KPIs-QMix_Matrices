@@ -275,10 +275,6 @@ from (select * from generate_series(0, 100)) tbl1
 where generate_series < date_part('day', current_date)
 '''
 sccf_dates = duckdb.query(qry).df()['sccf_date'].tolist()
-
-# current_month = '2024-01'
-# sccf_dates = ['2024-01-01', '2024-01-02', '2024-01-03', '2024-01-04', '2024-01-05', '2024-01-06', '2024-01-07', '2024-01-08', '2024-01-09', '2024-01-10', '2024-01-11', '2024-01-12', '2024-01-13', '2024-01-14', '2024-01-15', '2024-01-16', '2024-01-17', '2024-01-18', '2024-01-19', '2024-01-20', '2024-01-21', '2024-01-22', '2024-01-23', '2024-01-24', '2024-01-25', '2024-01-26', '2024-01-27', '2024-01-28', '2024-01-29', '2024-01-30', '2024-01-31']
-
 print(sccf_dates)
 
 
@@ -311,11 +307,11 @@ prepare_report(rec_date_from, rec_date_to, sccf_df, current_month + "-MTD")
 # In[15]:
 
 
-# # TDP-01
-# rec_date_from = current_month + "-01"
-# rec_date_to = current_month + "-10"
-# tdp_df = duckdb.query("select * from sccf_df where sccf_date>='" + rec_date_from + "' and sccf_date<='" + rec_date_to + "'").df()
-# prepare_report(rec_date_from, rec_date_to, tdp_df, current_month + "-TDP1")
+# TDP-01
+rec_date_from = current_month + "-01"
+rec_date_to = current_month + "-10"
+tdp_df = duckdb.query("select * from sccf_df where sccf_date>='" + rec_date_from + "' and sccf_date<='" + rec_date_to + "'").df()
+prepare_report(rec_date_from, rec_date_to, tdp_df, current_month + "-TDP1")
 
 # TDP-02
 rec_date_from = current_month + "-11"
@@ -323,11 +319,11 @@ rec_date_to = current_month + "-20"
 tdp_df = duckdb.query("select * from sccf_df where sccf_date>='" + rec_date_from + "' and sccf_date<='" + rec_date_to + "'").df()
 prepare_report(rec_date_from, rec_date_to, tdp_df, current_month + "-TDP2")
 
-# # TDP-03
-# rec_date_from = current_month + "-21"
-# rec_date_to = sccf_dates[len(sccf_dates)-1]
-# tdp_df = duckdb.query("select * from sccf_df where sccf_date>='" + rec_date_from + "' and sccf_date<='" + rec_date_to + "'").df()
-# prepare_report(rec_date_from, rec_date_to, tdp_df, current_month + "-TDP3")
+# TDP-03
+rec_date_from = current_month + "-21"
+rec_date_to = sccf_dates[len(sccf_dates)-1]
+tdp_df = duckdb.query("select * from sccf_df where sccf_date>='" + rec_date_from + "' and sccf_date<='" + rec_date_to + "'").df()
+prepare_report(rec_date_from, rec_date_to, tdp_df, current_month + "-TDP3")
 
 
 # In[11]:
@@ -430,50 +426,47 @@ print("Elapsed time to run script (mins): " + elapsed_time)
 # In[13]:
 
 
-# # analysis
-# qry = '''
-# select * 
-# from 
-#     (select * 
-#     from 
-#         (select 
-#             basepack, 
-#             town, 
-#             sccf_date, 
-#             lead(sccf_date, 1) over(partition by basepack, town order by sccf_date) sccf_date_1,
-#             lead(sccf_date, 2) over(partition by basepack, town order by sccf_date) sccf_date_2,
-#             lead(sccf_date, 3) over(partition by basepack, town order by sccf_date) sccf_date_3,
-#             lead(sccf_date, 4) over(partition by basepack, town order by sccf_date) sccf_date_4
-#         from (select basepack, town, sccf, sccf_date::date sccf_date from trend_df) tbl1
-#         where 
-#             sccf<0.90
-#             and town not in('WATER-DHAKA', 'MODERN TRADE', 'SMT & SHOPPING COMPL', 'OOH DISTRIBUTOR DHAK', 'OOH DISTRIBUTOR DHAKA')
-#         ) tbl1 
-#     where 
-#         sccf_date_4=(select max(sccf_date) from trend_df)
-#         and sccf_date_1-sccf_date=1
-#         and sccf_date_2-sccf_date_1=1
-#         and sccf_date_3-sccf_date_2=1
-#         and sccf_date_4-sccf_date_3=1
-#         and town='TEJGAON'
-#     ) tbl1 
-#     inner join 
-#     tgt_df tbl2 using(basepack, town)
-# order by tgt_cr desc
-# limit 5
-# '''
-# df = duckdb.query(qry).df()
+# analysis
+qry = '''
+select * 
+from 
+    (select * 
+    from 
+        (select 
+            basepack, 
+            town, 
+            sccf_date, 
+            lead(sccf_date, 1) over(partition by basepack, town order by sccf_date) sccf_date_1,
+            lead(sccf_date, 2) over(partition by basepack, town order by sccf_date) sccf_date_2,
+            lead(sccf_date, 3) over(partition by basepack, town order by sccf_date) sccf_date_3,
+            lead(sccf_date, 4) over(partition by basepack, town order by sccf_date) sccf_date_4
+        from (select basepack, town, sccf, sccf_date::date sccf_date from trend_df) tbl1
+        where 
+            sccf<0.90
+            and town not in('WATER-DHAKA', 'MODERN TRADE', 'SMT & SHOPPING COMPL', 'OOH DISTRIBUTOR DHAK', 'OOH DISTRIBUTOR DHAKA')
+        ) tbl1 
+    where 
+        sccf_date_4=(select max(sccf_date) from trend_df)
+        and sccf_date_1-sccf_date=1
+        and sccf_date_2-sccf_date_1=1
+        and sccf_date_3-sccf_date_2=1
+        and sccf_date_4-sccf_date_3=1
+        and town='TEJGAON'
+    ) tbl1 
+    inner join 
+    tgt_df tbl2 using(basepack, town)
+order by tgt_cr desc
+limit 5
+'''
+df = duckdb.query(qry).df()
 
-# # send - only me grp
-# import pywhatkit
-# emo = ":unlock\t"
-# msg = emo + " Are you continuously losing SCCF in UBL's very own Tejgaon? Here are packs, with < 90% SCCF for the past 5 days:\n- " + "\n- ".join(df['basepack'].tolist()) + "\nFind out more from this month's 2*2 SCCF matrix!"
-# print("\n" + msg)
-# pywhatkit.sendwhatmsg_to_group_instantly(group_id="DXqnN42tpV27ZoVWszBH9D", message=msg, tab_close=True)
+# send - only me grp
+import pywhatkit
+emo = ":unlock\t"
+msg = emo + " Are you continuously losing SCCF in UBL's very own Tejgaon? Here are packs, with < 90% SCCF for the past 5 days:\n- " + "\n- ".join(df['basepack'].tolist()) + "\nFind out more from this month's 2*2 SCCF matrix!"
+print("\n" + msg)
+pywhatkit.sendwhatmsg_to_group_instantly(group_id="DXqnN42tpV27ZoVWszBH9D", message=msg, tab_close=True)
 
 
 # In[ ]:
-
-
-
 

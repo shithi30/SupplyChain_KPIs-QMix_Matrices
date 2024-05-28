@@ -267,10 +267,6 @@ from (select * from generate_series(0, 100)) tbl1
 where generate_series < date_part('day', current_date)
 '''
 stock_dates = duckdb.query(qry).df()['stock_date'].tolist()
-
-# current_month = '2024-01'
-# stock_dates = ['2024-01-01', '2024-01-02', '2024-01-03', '2024-01-04', '2024-01-05', '2024-01-06', '2024-01-07', '2024-01-08', '2024-01-09', '2024-01-10', '2024-01-11', '2024-01-12', '2024-01-13', '2024-01-14', '2024-01-15', '2024-01-16', '2024-01-17', '2024-01-18', '2024-01-19', '2024-01-20', '2024-01-21', '2024-01-22', '2024-01-23', '2024-01-24', '2024-01-25', '2024-01-26', '2024-01-27', '2024-01-28', '2024-01-29', '2024-01-30', '2024-01-31']
-
 print(stock_dates)
 
 
@@ -281,50 +277,6 @@ print(stock_dates)
 rec_date_from = stock_dates[0]
 rec_date_to = stock_dates[len(stock_dates)-1]
 rpl_df = fetch_read_rpl(rec_date_from, rec_date_to)
-
-
-# In[8]:
-
-
-# # RPL
-# rec_date_from = stock_dates[0]
-# rec_date_to = stock_dates[len(stock_dates)-1]
-# filenames = [
-#     'Replenishment Repot_02 Dec 2023.xlsx',
-#     'Replenishment Repot_03 Dec 2023.xlsx',
-#     'Replenishment Repot_04 Dec 2023.xlsx',
-#     'Replenishment Repot_05 Dec 2023.xlsx',
-#     'Replenishment Repot_06 Dec 2023.xlsx',
-#     'Replenishment Repot_07 Dec 2023.xlsx',
-#     'Replenishment Repot_09 Dec 2023.xlsx',
-#     'Replenishment Repot_10 Dec 2023.xlsx',
-#     'Replenishment Repot_11 Dec 2023.xlsx',
-#     'Replenishment Repot_12 Dec 2023.xlsx',
-#     'Replenishment Repot_13 Dec 2023.xlsx',
-#     'Replenishment Repot_14 Dec 2023.xlsx',
-#     'Replenishment Repot_16 Dec 2023.xlsx',
-#     'Replenishment Repot_17 Dec 2023.xlsx',
-#     'Replenishment Repot_18 Dec 2023.xlsx',
-#     'Replenishment Repot_19 Dec 2023.xlsx',
-#     'Replenishment Repot_20 Dec 2023.xlsx',
-#     'Replenishment Repot_21 Dec 2023.xlsx',
-#     'Replenishment Repot_22 Dec 2023.xlsx',
-#     'Replenishment Repot_23 Dec 2023.xlsx',
-#     'Replenishment Repot_24 Dec 2023.xlsx',
-#     'Replenishment Repot_25 Dec 2023.xlsx',
-#     'Replenishment Repot_26 Dec 2023.xlsx',
-#     'Replenishment Repot_27 Dec 2023.xlsx',
-#     'Replenishment Repot_28 Dec 2023.xlsx'
-# ]
-# rpl_df = pd.DataFrame()
-# for f in filenames:
-#     print("Reading: " + f)
-#     file = "C:/Users/Shithi.Maitra/Unilever Codes/Ad Hoc/2by2 Matrices/RPL Inputs/" + f
-#     df = pd.read_excel(open(file, "rb"), sheet_name="Replenishment UBL_UCL", header=0, index_col=None)
-#     df = df[['Date', 'Town', 'Basepack', 'Stock on hand']]
-#     df.columns = ['rpl_date', 'town', 'basepack', 'stock']
-#     df = duckdb.query('''select strptime(rpl_date, '%d %b %Y') rpl_date, upper(town) town, upper(basepack) basepack, stock from df''').df()
-#     rpl_df = rpl_df.append(df)
 
 
 # In[9]:
@@ -429,7 +381,3 @@ print("Elapsed time to run script (mins): " + elapsed_time)
 
 
 # In[ ]:
-
-
-
-

@@ -276,10 +276,6 @@ from (select * from generate_series(0, 100)) tbl1
 where generate_series < date_part('day', current_date)
 '''
 qmix_dates = duckdb.query(qry).df()['qmix_date'].tolist()
-
-# current_month = '2024-01'
-# qmix_dates = ['2024-01-01', '2024-01-02', '2024-01-03', '2024-01-04', '2024-01-05', '2024-01-06', '2024-01-07', '2024-01-08', '2024-01-09', '2024-01-10', '2024-01-11', '2024-01-12', '2024-01-13', '2024-01-14', '2024-01-15', '2024-01-16', '2024-01-17', '2024-01-18', '2024-01-19', '2024-01-20', '2024-01-21', '2024-01-22', '2024-01-23', '2024-01-24', '2024-01-25', '2024-01-26', '2024-01-27', '2024-01-28', '2024-01-29', '2024-01-30', '2024-01-31']
-
 print(qmix_dates)
 
 
@@ -290,68 +286,6 @@ print(qmix_dates)
 rec_date_from = qmix_dates[0]
 rec_date_to = qmix_dates[len(qmix_dates)-1]
 rpl_df = fetch_read_rpl(rec_date_from, rec_date_to)
-
-
-# In[8]:
-
-
-# # RPL
-# rec_date_from = qmix_dates[0]
-# rec_date_to = qmix_dates[len(qmix_dates)-1]
-# filenames = [
-#     'Replenishment Repot_01 Jan 2024.xlsx',
-#     'Replenishment Repot_02 Jan 2024.xlsx',
-#     'Replenishment Repot_03 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_04 Jan 2024.xlsx',
-#     'Replenishment Repot_05 Jan 2024.xlsx',
-#     'Replenishment Repot_06 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_07 Jan 2024.xlsx',
-#     'Replenishment Repot_08 Jan 2024.xlsx',
-#     'Replenishment Repot_08 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_10 Jan 2024.xlsx',
-#     'Replenishment Repot_11 Jan 2024.xlsx',
-#     'Replenishment Repot_12 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_13 Jan 2024.xlsx',
-#     'Replenishment Repot_14 Jan 2024.xlsx',
-#     'Replenishment Repot_15 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_16 Jan 2024.xlsx',
-#     'Replenishment Repot_17 Jan 2024.xlsx',
-#     'Replenishment Repot_18 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_19 Jan 2024.xlsx',
-#     'Replenishment Repot_20 Jan 2024.xlsx',
-#     'Replenishment Repot_21 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_22 Jan 2024.xlsx',
-#     'Replenishment Repot_23 Jan 2024.xlsx',
-#     'Replenishment Repot_24 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_25 Jan 2024.xlsx',
-#     'Replenishment Repot_26 Jan 2024.xlsx',
-#     'Replenishment Repot_27 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_28 Jan 2024.xlsx',
-#     'Replenishment Repot_29 Jan 2024.xlsx',
-#     'Replenishment Repot_30 Jan 2024.xlsx',
-    
-#     'Replenishment Repot_31 Jan 2024.xlsx'
-# ]
-# rpl_df = pd.DataFrame()
-# for f in filenames:
-#     file = "C:/Users/Shithi.Maitra/Unilever Codes/Ad Hoc/2by2 Matrices/RPL Inputs/" + f
-#     print(1)
-#     try: df = pd.read_excel(open(file, "rb"), sheet_name="Replenishment UBL_UCL", header=0, index_col=None)
-#     except: continue
-#     print("Reading: " + f)
-#     df = df[['Date', 'Town', 'Basepack', 'Proposed qty', 'Norm qty']]
-#     df.columns = ['rpl_date', 'town', 'basepack', 'proposed_qty', 'norm_qty']
-#     df = duckdb.query('''select strptime(rpl_date, '%d %b %Y') rpl_date, upper(town) town, upper(basepack) basepack, proposed_qty, norm_qty from df''').df()
-#     rpl_df = rpl_df.append(df)
 
 
 # In[9]:
@@ -386,11 +320,11 @@ rec_date_to = current_month + "-20"
 tdp_df = duckdb.query("select * from rpl_df where rpl_date>='" + rec_date_from + "' and rpl_date<='" + rec_date_to + "'").df()
 prepare_report(rec_date_from, rec_date_to, tdp_df, current_month + "-TDP2")
 
-# # TDP-03
-# rec_date_from = current_month + "-21"
-# rec_date_to = qmix_dates[len(qmix_dates)-1]
-# tdp_df = duckdb.query("select * from rpl_df where rpl_date>='" + rec_date_from + "' and rpl_date<='" + rec_date_to + "'").df()
-# prepare_report(rec_date_from, rec_date_to, tdp_df, current_month + "-TDP3")
+# TDP-03
+rec_date_from = current_month + "-21"
+rec_date_to = qmix_dates[len(qmix_dates)-1]
+tdp_df = duckdb.query("select * from rpl_df where rpl_date>='" + rec_date_from + "' and rpl_date<='" + rec_date_to + "'").df()
+prepare_report(rec_date_from, rec_date_to, tdp_df, current_month + "-TDP3")
 
 
 # In[12]:
@@ -491,7 +425,3 @@ print("Elapsed time to run script (mins): " + elapsed_time)
 
 
 # In[ ]:
-
-
-
-
