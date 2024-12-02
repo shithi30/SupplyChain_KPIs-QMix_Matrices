@@ -1,6 +1,6 @@
 Unilever Supply Chain KPIs are monitored daily, TDP-wise, MTD (month till date) wise and monthly. In these scripts, I
-- Automate pulling necessary data (from ERPs, emails, poetals etc) for generating Supply Chain KPI matrices
-- Populate and format periodical KPI reports (DR, D0DR, Primary Line Fill, SCCF, Secondary Achievement, Quality-of-Mix - QMix)
+- Automate pulling necessary data (from ERPs, emails, poetals etc) for generating Supply Chain KPI matrices.
+- Populate and format periodical KPI reports (DR, D0DR, Primary Line Fill, SCCF, Secondary Achievement, Quality-of-Mix - QMix).
 - Automate circulation of operational insights for some preset scenarios.
 
 ### Tech Stack
