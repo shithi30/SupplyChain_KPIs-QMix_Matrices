@@ -10,5 +10,6 @@ Unilever Supply Chain KPIs are monitored daily, TDP-wise, MTD (month till date) 
 <img width="320" alt="ee4" src="https://github.com/shithi30/Supply-Chain-KPI-Matrix-Generation/assets/43873081/a745897e-8b74-4cc2-92d4-f2e3c12d8f95">
 </p>
 
-**Tech Stack:** Language - `Python` , Process Automation - `Selenium, Openpyxl, Windows Scheduler` , Data Analysis - `DuckDB` , Notification - `Win32com, Pywhatkit`
+### Tech Stack
+Language - `Python` , Process Automation - `Selenium, Openpyxl, Windows Scheduler` , Data Analysis - `DuckDB` , Notification - `Win32com, Pywhatkit`
 
